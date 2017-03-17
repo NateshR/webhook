@@ -17,17 +17,21 @@ def hooked(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
         repository = data['repository']['name']
-        if ('development' == repository or 'master' == repository):
-            commit_author = data['actor']['username']
-            commit_hash = data['push']['changes'][0]['new']['target']['hash'][:7]
-            commit_url = data['push']['changes'][0]['new']['target']['links']['html']['href']
-            logger.info(_platform)
-            send_email.delay(subject='%s committed %s in %s' % (commit_author, commit_hash, repository),
-                             template='pushhook/pull_hook.html',
-                             context={'author': commit_author, 'link': commit_url, 'date': datetime.date.today()},
-                             to_emails=['diwas.sharma@curofy.com', 'natesh.relhan@curofy.com'])
+        if 'Curofy' == repository:
+            branch_name = data['push']['changes'][0]['new']['name']
+            if branch_name == 'development' or branch_name == 'master':
+                logger.info('hooked - pushed in %s:%s' % (repository, branch_name))
+                commit_author = data['actor']['username']
+                commit_hash = data['push']['changes'][0]['new']['target']['hash'][:7]
+                commit_url = data['push']['changes'][0]['new']['target']['links']['html']['href']
+                logger.info(_platform)
+                send_email.delay(subject='%s committed %s in %s' % (commit_author, commit_hash, repository),
+                                 template='pushhook/pull_hook.html',
+                                 context={'author': commit_author, 'link': commit_url, 'date': datetime.date.today()},
+                                 to_emails=['diwas.sharma@curofy.com', 'natesh.relhan@curofy.com',
+                                            'simar.arora@curofy.com'])
         else:
-            logger.info('hooked - pushed in ' + repository)
+            logger.info('hooked - pushed in %s' % repository)
         return HttpResponse(status=200)
     else:
         return displayHTML(request)
