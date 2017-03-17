@@ -25,16 +25,16 @@ def hooked(request):
                 commit_hash = data['push']['changes'][0]['new']['target']['hash'][:7]
                 commit_url = data['push']['changes'][0]['new']['target']['links']['html']['href']
                 logger.info(_platform)
-                send_email.delay(subject='%s committed %s in %s' % (commit_author, commit_hash, repository),
+                email = send_email.delay(subject='%s committed %s in %s' % (commit_author, commit_hash, repository),
                                  template='pushhook/pull_hook.html',
                                  context={'author': commit_author, 'link': commit_url, 'date': datetime.date.today()},
                                  to_emails=['diwas.sharma@curofy.com', 'natesh.relhan@curofy.com',
                                             'simar.arora@curofy.com'])
-                if send_email.read():
-                    logger.info('email status - '+send_email.get())
+                if email.read():
+                    logger.info('email status - '+email.get())
                 else:
                     logger.info('email not ready')
-                
+
         else:
             logger.info('hooked - pushed in %s' % repository)
         return HttpResponse(status=200)
