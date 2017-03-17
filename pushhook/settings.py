@@ -25,7 +25,7 @@ SECRET_KEY = '032(mcea-+fhg)=r3imb^0v=zo==9c9cyu_n0(_@%qhmunk&2q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.ngrok.io','54.213.246.126']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.ngrok.io', '54.213.246.126']
 
 # Application definition
 
@@ -157,14 +157,17 @@ LOGGING = {
     'handlers': {
         'file': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'debug.log',
+            'formatter': 'simple',
+            'maxBytes': 1 * 1024 * 1024,
+            'backupCount': 4,
         },
         'console': {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+            'formatter': 'simple',
         },
         'mail_admins': {
             'level': 'WARNING',
@@ -173,7 +176,7 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['console','file'],
+            'handlers': ['console', 'file'],
             'level': 'DEBUG',
         },
         'django.request': {
@@ -189,4 +192,3 @@ LOGGING = {
 }
 LOGGING_CONFIG = None
 logging.config.dictConfig(LOGGING)
-
