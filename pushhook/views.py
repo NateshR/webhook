@@ -19,8 +19,8 @@ def hooked(request):
         repository = data['repository']['name']
         if 'Curofy' == repository:
             branch_name = data['push']['changes'][0]['new']['name']
+            logger.info('hooked - pushed in %s:%s' % (repository, branch_name))
             if branch_name == 'development' or branch_name == 'master':
-                logger.info('hooked - pushed in %s:%s' % (repository, branch_name))
                 commit_author = data['actor']['username']
                 commit_hash = data['push']['changes'][0]['new']['target']['hash'][:7]
                 commit_url = data['push']['changes'][0]['new']['target']['links']['html']['href']
