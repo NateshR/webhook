@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '032(mcea-+fhg)=r3imb^0v=zo==9c9cyu_n0(_@%qhmunk&2q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.ngrok.io', '54.213.246.126']
 
@@ -140,7 +140,6 @@ ADMINS = [('Natesh', 'natesh.relhan@curofy.com')]
 
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
             'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
@@ -184,10 +183,6 @@ LOGGING = {
             'level': 'WARNING',
             'propagate': False,
         },
-        'pushhook.views': {
-            'handlers': ['console', 'mail_admins'],
-            'level': 'DEBUG',
-        }
     }
 }
 LOGGING_CONFIG = None
