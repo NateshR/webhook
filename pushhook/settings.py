@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '032(mcea-+fhg)=r3imb^0v=zo==9c9cyu_n0(_@%qhmunk&2q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.ngrok.io', '54.213.246.126']
 
@@ -155,7 +155,7 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
             'filename': 'debug.log',
             'formatter': 'simple',
@@ -163,7 +163,7 @@ LOGGING = {
             'backupCount': 4,
         },
         'console': {
-            'level': 'DEBUG',
+            'level': 'INFO',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
@@ -176,13 +176,17 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console', 'file'],
-            'level': 'DEBUG',
+            'level': 'INFO',
         },
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'WARNING',
             'propagate': False,
         },
+        'pushhook.views': {
+            'handlers': ['console', 'mail_admins', 'file'],
+            'level': 'INFO',
+        }
     }
 }
 LOGGING_CONFIG = None
