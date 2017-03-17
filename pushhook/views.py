@@ -15,7 +15,7 @@ def displayHTML(request):
 def hooked(request):
     logger.info('hooked - ' + request.method)
     if request.method == 'POST':
-        data = json.loads(request.body)
+        data = json.loads(request.body.decode('utf-8'))
         commit_author = data['actor']['username']
         commit_hash = data['push']['changes'][0]['new']['target']['hash'][:7]
         commit_url = data['push']['changes'][0]['new']['target']['links']['html']['href']
