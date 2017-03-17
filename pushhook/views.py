@@ -30,10 +30,6 @@ def hooked(request):
                                  context={'author': commit_author, 'link': commit_url, 'date': datetime.date.today()},
                                  to_emails=['diwas.sharma@curofy.com', 'natesh.relhan@curofy.com',
                                             'simar.arora@curofy.com'])
-                if email.read():
-                    logger.info('email status - '+email.get())
-                else:
-                    logger.info('email not ready')
 
         else:
             logger.info('hooked - pushed in %s' % repository)
