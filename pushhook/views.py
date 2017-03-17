@@ -16,13 +16,18 @@ def hooked(request):
     logger.info('hooked - ' + request.method)
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
-        commit_author = data['actor']['username']
-        commit_hash = data['push']['changes'][0]['new']['target']['hash'][:7]
-        commit_url = data['push']['changes'][0]['new']['target']['links']['html']['href']
-        logger.info(_platform)
-        send_email.delay(subject='%s committed %s' % (commit_author, commit_hash), template='pushhook/pull_hook.html',
-                         context={'author': commit_author, 'link': commit_url, 'date': datetime.date.today()},
-                         to_emails=['diwas.sharma@curofy.com', 'natesh.relhan@curofy.com'])
+        repository = data['repository']['name']
+        if ('development' == repository or 'master' == repository):
+            commit_author = data['actor']['username']
+            commit_hash = data['push']['changes'][0]['new']['target']['hash'][:7]
+            commit_url = data['push']['changes'][0]['new']['target']['links']['html']['href']
+            logger.info(_platform)
+            send_email.delay(subject='%s committed %s in %s' % (commit_author, commit_hash, repository),
+                             template='pushhook/pull_hook.html',
+                             context={'author': commit_author, 'link': commit_url, 'date': datetime.date.today()},
+                             to_emails=['diwas.sharma@curofy.com', 'natesh.relhan@curofy.com'])
+        else:
+            logger.info('hooked - pushed in ' + repository)
         return HttpResponse(status=200)
     else:
         return displayHTML(request)
