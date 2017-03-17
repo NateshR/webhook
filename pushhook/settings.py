@@ -181,7 +181,7 @@ LOGGING = {
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'WARNING',
-            'propagate': False,
+            'propagate': True,
         },
         'pushhook.views': {
             'handlers': ['console', 'mail_admins', 'file'],
