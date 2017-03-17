@@ -155,6 +155,11 @@ LOGGING = {
         },
     },
     'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
         'console': {
             'level': 'DEBUG',
             'filters': ['require_debug_true'],
@@ -168,7 +173,7 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console','file'],
             'level': 'DEBUG',
         },
         'django.request': {
