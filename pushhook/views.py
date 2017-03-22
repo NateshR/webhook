@@ -18,19 +18,34 @@ def hooked(request):
         data = json.loads(request.body.decode('utf-8'))
         repository = data['repository']['name']
         if 'Curofy' == repository:
-            branch_name = data['push']['changes'][0]['new']['name']
-            logger.info('hooked - pushed in %s:%s' % (repository, branch_name))
-            if branch_name == 'development' or branch_name == 'master':
-                commit_author = data['actor']['username']
-                commit_hash = data['push']['changes'][0]['new']['target']['hash'][:7]
-                commit_url = data['push']['changes'][0]['new']['target']['links']['html']['href']
-                logger.info(_platform)
-                email = send_email.delay(subject='%s committed %s in %s' % (commit_author, commit_hash, repository),
-                                 template='pushhook/pull_hook.html',
-                                 context={'author': commit_author, 'link': commit_url, 'date': datetime.date.today()},
-                                 to_emails=['diwas.sharma@curofy.com', 'natesh.relhan@curofy.com',
-                                            'simar.arora@curofy.com'])
-
+            if data['pullrequest']:
+                branch_name = data['pullrequest']['destination']['name']
+                logger.info('hooked - merged in %s:%s' % (repository, branch_name))
+                if branch_name == 'development' or branch_name == 'master':
+                    commit_author = data['pullrequest']['author']
+                    commit_hash = data['pullrequest']['merge_commit']['hash'][:7]
+                    commit_url = data['pullrequest']['links']['html']['href']
+                    logger.info(_platform)
+                    email = send_email.delay(subject='%s committed %s in %s' % (commit_author, commit_hash, repository),
+                                             template='pushhook/pull_hook.html',
+                                             context={'author': commit_author, 'link': commit_url,
+                                                      'date': datetime.date.today()},
+                                             to_emails=['diwas.sharma@curofy.com', 'natesh.relhan@curofy.com',
+                                                        'simar.arora@curofy.com'])
+            elif data['push']:
+                branch_name = data['push']['changes'][0]['new']['name']
+                logger.info('hooked - pushed in %s:%s' % (repository, branch_name))
+                if branch_name == 'development' or branch_name == 'master':
+                    commit_author = data['actor']['username']
+                    commit_hash = data['push']['changes'][0]['new']['target']['hash'][:7]
+                    commit_url = data['push']['changes'][0]['new']['target']['links']['html']['href']
+                    logger.info(_platform)
+                    email = send_email.delay(subject='%s committed %s in %s' % (commit_author, commit_hash, repository),
+                                             template='pushhook/pull_hook.html',
+                                             context={'author': commit_author, 'link': commit_url,
+                                                      'date': datetime.date.today()},
+                                             to_emails=['diwas.sharma@curofy.com', 'natesh.relhan@curofy.com',
+                                                        'simar.arora@curofy.com'])
         else:
             logger.info('hooked - pushed in %s' % repository)
         return HttpResponse(status=200)
