@@ -16,7 +16,7 @@ def hooked(request):
     logger.info('hooked - ' + request.method)
     if request.method == 'POST':
         data = json.loads(request.body.decode('utf-8'))
-        type = data['repository']['tag']
+        type = data['repository']['type']
         repository = data['repository']['name']
         if 'tag' == type:
             request.post('35.187.144.233:4390/update_tags')
