@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 def displayHTML(request):
-    return HttpResponse('Welcome to push-HOOK!!')
+    return HttpResponse('Welcome to push-HOOK!!?')
 
 
 def hooked(request):
