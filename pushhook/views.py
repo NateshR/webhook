@@ -4,6 +4,7 @@ import logging
 import json
 from .tasks import send_email
 import datetime
+import requests
 
 logger = logging.getLogger(__name__)
 
@@ -19,7 +20,7 @@ def hooked(request):
         type = data['repository']['type']
         repository = data['repository']['name']
         if 'tag' == type:
-            request.post('35.187.144.233:4390/update_tags')
+            requests.get('http://35.187.144.233:4390/update_tags')
             logger.info('pushed tag -- %s' % repository)
         else:
             if 'Curofy' == repository:
