@@ -20,7 +20,8 @@ def hooked(request):
         type = data['repository']['type']
         repository = data['repository']['name']
         if 'tag' == type:
-            requests.get('http://35.187.144.233:4390/update_tags')
+            response = requests.get('http://35.187.144.233:4390/update_tags')
+            logger.info('status of push - %s' % response.status_code)
             logger.info('pushed tag -- %s' % repository)
         else:
             if 'Curofy' == repository:
